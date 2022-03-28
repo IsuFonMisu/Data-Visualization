@@ -1,0 +1,46 @@
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+import fuzzywuzzy
+from fuzzywuzzy import process
+
+
+names_list = []   ### put names here
+names_list.sort()
+
+names = {}
+temp=[]
+matches_dict={}
+values=[]
+
+for name in names_list:
+    matches = fuzzywuzzy.process.extract(name, names_list, scorer=fuzzywuzzy.fuzz.token_sort_ratio)
+    
+    for i in matches:
+        temp=list(i)
+        matches_dict[temp[0]] = temp[1]
+    
+    matches_dict[name]=99
+    
+    keys=[]
+    values=[]
+    for i in matches_dict:
+        keys.append(i)
+    
+    keys.sort()
+    
+    for i in keys:
+        values.append(matches_dict[i])
+    
+    names[name]=values
+    
+names_df=pd.DataFrame(names, index=[names_list])
+
+# Set the width and height of the figure
+plt.figure(figsize=(14,7))
+
+# Add title
+plt.title("İsimlerin Benzerliği %x")
+sns.heatmap(data=names_df, annot=True, square=1,cmap='viridis_r', vmin=0,vmax=100)
