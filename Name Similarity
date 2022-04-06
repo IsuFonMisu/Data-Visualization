@@ -42,5 +42,5 @@ names_df=pd.DataFrame(names, index=[names_list])
 plt.figure(figsize=(14,7))
 
 # Add title
-plt.title("İsimlerin Benzerliği %x")
+plt.title("Similarity of Names %x")
 sns.heatmap(data=names_df, annot=True, square=1,cmap='viridis_r', vmin=0,vmax=100)
